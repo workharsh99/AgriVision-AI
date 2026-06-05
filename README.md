@@ -1,18 +1,31 @@
-# AgriVision AI 🌱
+# 🌱 AgriVision AI - Premium Crop Disease Detection & Smart Agriculture Platform
 
-**AgriVision AI** is a modern, responsive, and full-featured precision agricultural crop disease detection and recommendation platform built using the MERN stack. It leverages Google's **Gemini AI** to diagnose crop pathogens from uploaded images and provides actionable organic/chemical treatment guides, irrigation frequencies, and soil fertilization suggestions.
+![Stack](https://img.shields.io/badge/Stack-MERN-green?style=flat-square)
+![Frontend](https://img.shields.io/badge/Frontend-React%20%7C%20Tailwind-blue?style=flat-square)
+![Backend](https://img.shields.io/badge/Backend-Node%20%7C%20Express-brightgreen?style=flat-square)
+![Database](https://img.shields.io/badge/Database-MongoDB%20Atlas-yellowgreen?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-purple?style=flat-square)
 
-## 🚀 Key Features
+A high-performance, responsive smart agricultural assistant and crop disease diagnostics dashboard built on the MERN stack. Powered by Google's **Gemini AI**, it analyzes uploaded crop foliage images to detect pathogens, returns confidence ratings, generates comprehensive PDF reports with pathologist verification QR codes, and delivers personalized watering, fertilization, and treatment recommendations.
 
-* **Instant Visual Crop Pathology**: Drag-and-drop or take a live camera photo of crop leaf surfaces to identify diseases with confidence ratings.
-* **Smart Recommendation Engine**: Receives tailor-made chemical sprays, organic alternatives, exact dosages, and watering depths.
-* **Agri Chat Assistant**: Farmers can ask crop questions (e.g., "Why are my leaves yellow?") using Voice Input (SpeechRecognition) and receive Voice Responses (SpeechSynthesis).
-* **Farm Productivity Score**: History-based health scoring calculating active farm disease levels.
-* **Crop Sowing Calendar**: Plan planting, fertilizing, and harvesting dates tailored to preferred crops.
-* **Vector-grade PDF Reports**: Generate, print, or email reports containing verification QR codes and pathologist certifications.
-* **Multi-Language Support**: Fully localized translations for English, Hindi, and Spanish.
-* **Responsive Dark Mode**: Smooth HSL tailored color palette transitions suitable for field work.
-* **Outbreak Analytics Dashboards**: Interactive charts (Bar & Doughnut) for admins to track global crop disease distributions.
+---
+
+## ✨ Features
+
+### 🎨 Premium UI/UX Design System
+* **Dark Mode & HSL Color Palette**: A gorgeous, field-optimized dark/light aesthetic using custom glassmorphic panels, smooth transitions, and high-contrast charts suitable for field work.
+* **Micro-Animations & Responsive Layouts**: Built from the ground up to be fully mobile-responsive with fluid grid structures, hover scale effects, and animated state transitions.
+* **Multi-Language Support**: Fully localized translations for English, Hindi, and Spanish to accommodate diverse farming demographics.
+
+### 🤖 Generative AI Diagnostics & Assistant
+* **Instant Pathogen Scanning**: Upload or capture plant leaf images to identify crop diseases instantly.
+* **Voice-Enabled AI Chatbot**: Hands-free farming assistant supporting Voice Input (SpeechRecognition) and Voice Output (SpeechSynthesis) to answer questions in real-time.
+* **Smart Recommendation Engine**: Tailor-made fertilization guides, chemical and organic pest controls, exact watering frequencies, and weather precautions.
+
+### 📈 Outbreak Analytics & Reports
+* **Interactive Dashboard**: Custom charts (Bar and Doughnut) using Chart.js to track scan histories and regional crop disease distributions.
+* **Vector-grade PDF Reports**: Compile and download pathogen diagnostic certificates featuring verification QR codes and pathologist signatures.
+* **Notification Dispatcher**: Automated SMTP email reports and simulated SMS alerts for crop hazard warnings.
 
 ---
 
@@ -73,9 +86,12 @@ Create a `.env` file inside the `server/` directory:
 
 ```env
 PORT=5000
-MONGO_URI=your_mongodb_connection_string
+# Connection URI for MongoDB. If you encounter querySrv DNS resolution errors (e.g. ECONNREFUSED) on Windows/Docker/VPNs,
+# use the standard replica set URI format (mongodb://user:pass@host1:27017,host2:27017.../?ssl=true&authSource=admin...)
+MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/agrivision?retryWrites=true&w=majority
 JWT_SECRET=your_jwt_signing_key_here
-GEMINI_API_KEY=your_google_gemini_api_key
+GEMINI_API_KEY=your_google_gemini_api_key_here
+CLIENT_URL=http://localhost:5173
 
 # Optional: SMTP Credentials for real email dispatching
 SMTP_HOST=smtp.gmail.com
@@ -109,6 +125,19 @@ npm install
 npm run dev
 ```
 Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 🐳 Docker Deployment
+
+The application is containerized with multi-stage production Dockerfiles and orchestratable via `docker-compose`.
+
+```bash
+# Spin up MongoDB, Backend, and Frontend containers simultaneously
+docker compose up --build
+```
+* **Frontend**: Accessible at [http://localhost:5173](http://localhost:5173) (Served via Nginx)
+* **Backend**: Accessible at [http://localhost:5000](http://localhost:5000) (Served via Node/Express)
 
 ---
 
