@@ -5,7 +5,7 @@ import { ThemeContext } from '../context/ThemeContext.jsx';
 import { LanguageContext } from '../context/LanguageContext.jsx';
 import { 
   Leaf, Sun, Moon, Globe, Menu, X, LogOut, User, 
-  LayoutDashboard, Camera, MessageSquare, History, Shield 
+  LayoutDashboard, Camera, MessageSquare, Shield 
 } from 'lucide-react';
 
 const Navbar = () => {
@@ -76,10 +76,7 @@ const Navbar = () => {
                   <MessageSquare className="h-4 w-4 mr-1" />
                   {t('navAIChat')}
                 </Link>
-                <Link to="/reports" className={linkClass('/reports')}>
-                  <History className="h-4 w-4 mr-1" />
-                  {t('navReports')}
-                </Link>
+
                 {user.role === 'admin' && (
                   <Link to="/admin" className={linkClass('/admin')}>
                     <Shield className="h-4 w-4 mr-1" />
@@ -196,7 +193,7 @@ const Navbar = () => {
                 <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{t('navDashboard')}</Link>
                 <Link to="/upload" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{t('navUpload')}</Link>
                 <Link to="/chat" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{t('navAIChat')}</Link>
-                <Link to="/reports" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{t('navReports')}</Link>
+
                 {user.role === 'admin' && (
                   <Link to="/admin" onClick={() => setMobileMenuOpen(false)} className="block px-3 py-2 rounded-md text-base font-medium text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800">{t('navAdmin')}</Link>
                 )}

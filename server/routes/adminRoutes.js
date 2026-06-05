@@ -3,8 +3,7 @@ import {
   getAllUsers, 
   deleteUser, 
   getAllReports, 
-  deleteReport, 
-  getDashboardAnalytics 
+  deleteReport 
 } from '../controllers/adminController.js';
 import { protect, admin } from '../middleware/authMiddleware.js';
 
@@ -14,6 +13,5 @@ router.get('/users', protect, admin, getAllUsers);
 router.delete('/users/:id', protect, admin, deleteUser);
 router.get('/reports', protect, admin, getAllReports);
 router.delete('/reports/:id', protect, admin, deleteReport);
-router.get('/analytics', protect, admin, getDashboardAnalytics);
 
 export default router;

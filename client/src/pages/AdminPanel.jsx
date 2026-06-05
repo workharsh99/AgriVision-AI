@@ -2,14 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { LanguageContext } from '../context/LanguageContext.jsx';
 import API from '../services/api.js';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend } from 'chart.js';
-import { Bar, Doughnut } from 'react-chartjs-2';
 import { 
-  Users, AlertTriangle, ShieldCheck, Activity, BarChart3, 
+  Users, AlertTriangle, ShieldCheck, 
   Trash2, Mail, MapPin, Scale, RefreshCw, Trash, UserCheck
 } from 'lucide-react';
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Title, Tooltip, Legend);
 
 const AdminPanel = () => {
   const { user } = useContext(AuthContext);
@@ -17,17 +13,13 @@ const AdminPanel = () => {
   
   const [users, setUsers] = useState([]);
   const [reports, setReports] = useState([]);
-  const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   
-  const [activeTab, setActiveTab] = useState('analytics'); // analytics, users, reports
+  const [activeTab, setActiveTab] = useState('users'); // users, reports
 
   const loadAdminData = async () => {
     try {
-      const analyticsRes = await API.get('/admin/analytics');
-      setAnalytics(analyticsRes.data);
-
       const usersRes = await API.get('/admin/users');
       setUsers(usersRes.data);
 
@@ -74,57 +66,7 @@ const AdminPanel = () => {
     }
   };
 
-  // 1. Chart Configurations
-  const cropLabels = analytics?.cropDistribution?.map(c => c._id) || ['Tomato', 'Corn', 'Rice'];
-  const cropCounts = analytics?.cropDistribution?.map(c => c.count) || [0, 0, 0];
 
-  const diseaseLabels = analytics?.diseaseDistribution?.map(d => d._id) || ['Blight', 'Rust', 'Blast'];
-  const diseaseCounts = analytics?.diseaseDistribution?.map(d => d.count) || [0, 0, 0];
-
-  const doughnutData = {
-    labels: ['Healthy Crops', 'Diseased Crops'],
-    datasets: [
-      {
-        data: [analytics?.healthyCrops || 1, analytics?.diseasedCrops || 0],
-        backgroundColor: ['#44ac5c', '#ef4444'],
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  const cropBarData = {
-    labels: cropLabels,
-    datasets: [
-      {
-        label: 'Global Crop Scans',
-        data: cropCounts,
-        backgroundColor: '#346856',
-        borderRadius: 4,
-      },
-    ],
-  };
-
-  const diseaseBarData = {
-    labels: diseaseLabels,
-    datasets: [
-      {
-        label: 'Detected Outbreaks',
-        data: diseaseCounts,
-        backgroundColor: '#848171',
-        borderRadius: 4,
-      },
-    ],
-  };
-
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        labels: { boxWidth: 10, color: 'rgb(100, 116, 139)' }
-      }
-    }
-  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
@@ -151,16 +93,6 @@ const AdminPanel = () => {
 
       {/* Tabs selectors */}
       <div className="flex border-b border-slate-200 dark:border-slate-800 gap-4 mb-6">
-        <button
-          onClick={() => setActiveTab('analytics')}
-          className={`pb-3 text-sm font-bold border-b-2 transition-all ${
-            activeTab === 'analytics' 
-              ? 'border-forest text-forest dark:border-leaf dark:text-leaf' 
-              : 'border-transparent text-slate-400 hover:text-slate-600'
-          }`}
-        >
-          Outbreak Analytics
-        </button>
         <button
           onClick={() => setActiveTab('users')}
           className={`pb-3 text-sm font-bold border-b-2 transition-all ${
@@ -194,74 +126,6 @@ const AdminPanel = () => {
         </div>
       ) : (
         <div className="space-y-6">
-          
-          {/* TAB 1: ANALYTICS */}
-          {activeTab === 'analytics' && analytics && (
-            <div className="space-y-6">
-              
-              {/* Aggregation counts */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                
-                <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100 dark:bg-slate-900 dark:border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-semibold text-slate-400 block uppercase">Total Active Farmers</span>
-                    <span className="text-2xl font-black mt-2 block text-slate-950 dark:text-white">{analytics.totalUsers}</span>
-                  </div>
-                  <Users className="h-10 w-10 text-forest/20 dark:text-leaf/20" />
-                </div>
-
-                <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100 dark:bg-slate-900 dark:border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-semibold text-slate-400 block uppercase">Total Platform Reports</span>
-                    <span className="text-2xl font-black mt-2 block text-slate-950 dark:text-white">{analytics.totalReports}</span>
-                  </div>
-                  <Activity className="h-10 w-10 text-forest/20 dark:text-leaf/20" />
-                </div>
-
-                <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100 dark:bg-slate-900 dark:border-slate-800 flex items-center justify-between">
-                  <div>
-                    <span className="text-xs font-semibold text-slate-400 block uppercase">Diseased Outbreaks</span>
-                    <span className="text-2xl font-black mt-2 block text-red-600">{analytics.diseasedCrops}</span>
-                  </div>
-                  <AlertTriangle className="h-10 w-10 text-red-600/20" />
-                </div>
-
-              </div>
-
-              {/* Aggregated charts grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                
-                {/* Crops analyzed bar chart */}
-                <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100 dark:bg-slate-900 dark:border-slate-800 lg:col-span-2">
-                  <h3 className="text-sm font-bold text-slate-950 dark:text-white mb-4 flex items-center">
-                    <BarChart3 className="h-4.5 w-4.5 mr-1 text-forest" /> Crop Type Distribution
-                  </h3>
-                  <div className="h-64">
-                    <Bar data={cropBarData} options={chartOptions} />
-                  </div>
-                </div>
-
-                {/* Health distribution Doughnut */}
-                <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100 dark:bg-slate-900 dark:border-slate-800">
-                  <h3 className="text-sm font-bold text-slate-950 dark:text-white mb-4">Pathology Outbreak Ratio</h3>
-                  <div className="h-64">
-                    <Doughnut data={doughnutData} options={chartOptions} />
-                  </div>
-                </div>
-
-                {/* Disease outbreaks frequency */}
-                <div className="rounded-2xl bg-white p-6 shadow-sm border border-slate-100 dark:bg-slate-900 dark:border-slate-800 lg:col-span-3">
-                  <h3 className="text-sm font-bold text-slate-950 dark:text-white mb-4">Most Frequent Pathology Issues</h3>
-                  <div className="h-64">
-                    <Bar data={diseaseBarData} options={chartOptions} />
-                  </div>
-                </div>
-
-              </div>
-
-            </div>
-          )}
-
           {/* TAB 2: USERS REGISTRY */}
           {activeTab === 'users' && (
             <div className="rounded-2xl bg-white shadow-md border border-slate-100 dark:bg-slate-900 dark:border-slate-800 overflow-hidden">

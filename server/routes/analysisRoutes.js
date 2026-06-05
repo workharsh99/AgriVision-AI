@@ -3,9 +3,7 @@ import multer from 'multer';
 import { 
   uploadCropImage, 
   getAnalysisHistory, 
-  getAnalysisById, 
-  triggerEmailReport, 
-  triggerSMSReport 
+  getAnalysisById 
 } from '../controllers/analysisController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
@@ -29,7 +27,5 @@ const router = express.Router();
 router.post('/upload', protect, upload.single('image'), uploadCropImage);
 router.get('/history', protect, getAnalysisHistory);
 router.get('/:id', protect, getAnalysisById);
-router.post('/:id/email', protect, triggerEmailReport);
-router.post('/:id/sms', protect, triggerSMSReport);
 
 export default router;

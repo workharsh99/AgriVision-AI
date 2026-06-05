@@ -6,7 +6,7 @@
 ![Database](https://img.shields.io/badge/Database-MongoDB%20Atlas-yellowgreen?style=flat-square)
 ![License](https://img.shields.io/badge/License-MIT-purple?style=flat-square)
 
-A high-performance, responsive smart agricultural assistant and crop disease diagnostics dashboard built on the MERN stack. Powered by Google's **Gemini AI**, it analyzes uploaded crop foliage images to detect pathogens, returns confidence ratings, generates comprehensive PDF reports with pathologist verification QR codes, and delivers personalized watering, fertilization, and treatment recommendations.
+A high-performance, responsive smart agricultural assistant and crop disease diagnostics dashboard built on the MERN stack. Powered by Google's **Gemini AI**, it analyzes uploaded crop foliage images to detect pathogens, returns confidence ratings, and delivers personalized watering, fertilization, and treatment recommendations.
 
 ---
 
@@ -22,10 +22,7 @@ A high-performance, responsive smart agricultural assistant and crop disease dia
 * **Voice-Enabled AI Chatbot**: Hands-free farming assistant supporting Voice Input (SpeechRecognition) and Voice Output (SpeechSynthesis) to answer questions in real-time.
 * **Smart Recommendation Engine**: Tailor-made fertilization guides, chemical and organic pest controls, exact watering frequencies, and weather precautions.
 
-### 📈 Outbreak Analytics & Reports
-* **Interactive Dashboard**: Custom charts (Bar and Doughnut) using Chart.js to track scan histories and regional crop disease distributions.
-* **Vector-grade PDF Reports**: Compile and download pathogen diagnostic certificates featuring verification QR codes and pathologist signatures.
-* **Notification Dispatcher**: Automated SMTP email reports and simulated SMS alerts for crop hazard warnings.
+
 
 ---
 
@@ -152,8 +149,6 @@ docker compose up --build
 * `POST /api/analysis/upload` - Upload image file via Multer and diagnose with Gemini (Private)
 * `GET /api/analysis/history` - Retrieve history list (Private, supports crop/date filters)
 * `GET /api/analysis/:id` - Fetch single analysis detail (Private)
-* `POST /api/analysis/:id/email` - Re-trigger PDF Email delivery (Private)
-* `POST /api/analysis/:id/sms` - Dispatch SMS alert (Private)
 
 ### Voice AI Assistant
 * `POST /api/chat` - Feed query history and query message to Gemini (Private)
@@ -162,7 +157,6 @@ docker compose up --build
 * `GET /api/weather` - Fetch simulated agricultural weather for farmer's location (Private)
 
 ### System Administration (Admin Role Only)
-* `GET /api/admin/analytics` - Crop scan distributions and health aggregates
 * `GET /api/admin/users` - Fetch full user list
 * `DELETE /api/admin/users/:id` - Remove user and all historic data
 * `GET /api/admin/reports` - Fetch global crop scan reports list

@@ -3,9 +3,8 @@ import { useDropzone } from 'react-dropzone';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { LanguageContext } from '../context/LanguageContext.jsx';
 import API from '../services/api.js';
-import { generatePDFReport } from '../utils/pdfGenerator.js';
 import { 
-  Upload, Camera, RefreshCw, FileDown, Mail, Phone, AlertCircle, 
+  Upload, Camera, RefreshCw, AlertCircle, 
   CheckCircle2, XCircle, Info, ShieldAlert, Droplets, FlaskConical, CloudRain, Lightbulb 
 } from 'lucide-react';
 
@@ -17,8 +16,6 @@ const UploadCrop = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [result, setResult] = useState(null);
-  const [emailStatus, setEmailStatus] = useState('');
-  const [smsStatus, setSmsStatus] = useState('');
 
   const onDrop = useCallback((acceptedFiles) => {
     setError('');
@@ -48,8 +45,6 @@ const UploadCrop = () => {
     setLoading(true);
     setError('');
     setResult(null);
-    setEmailStatus('');
-    setSmsStatus('');
 
     const formData = new FormData();
     formData.append('image', file);
@@ -72,49 +67,9 @@ const UploadCrop = () => {
     setFile(null);
     setResult(null);
     setError('');
-    setEmailStatus('');
-    setSmsStatus('');
   };
 
-  // 1. PDF Actions
-  const handleDownloadPDF = () => {
-    if (!result) return;
-    const doc = generatePDFReport(user, result);
-    doc.save(`AgriVision_${result.cropName}_Report.pdf`);
-  };
 
-  const handlePrintPDF = () => {
-    if (!result) return;
-    const doc = generatePDFReport(user, result);
-    const url = doc.output('bloburl');
-    window.open(url, '_blank');
-  };
-
-  // 2. Email Delivery Trigger
-  const handleEmailReport = async () => {
-    if (!result) return;
-    setEmailStatus('sending');
-    try {
-      await API.post(`/analysis/${result._id}/email`);
-      setEmailStatus('success');
-    } catch (err) {
-      console.error(err);
-      setEmailStatus('error');
-    }
-  };
-
-  // 3. SMS Alert Trigger
-  const handleSMSReport = async () => {
-    if (!result) return;
-    setSmsStatus('sending');
-    try {
-      await API.post(`/analysis/${result._id}/sms`, { phone: '+1 (555) 019-2834' });
-      setSmsStatus('success');
-    } catch (err) {
-      console.error(err);
-      setSmsStatus('error');
-    }
-  };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 bg-slate-50 dark:bg-slate-950 transition-colors duration-200">
@@ -280,25 +235,6 @@ const UploadCrop = () => {
                     </h2>
                     <p className="text-xs text-slate-400 mt-1">Confirmed pathological analysis</p>
                   </div>
-                  
-                  {/* Action buttons */}
-                  <div className="flex flex-wrap gap-2 mt-4 sm:mt-0">
-                    <button 
-                      onClick={handleDownloadPDF}
-                      className="flex items-center space-x-1 text-xs font-semibold bg-forest/10 hover:bg-forest/20 text-forest p-2 rounded-lg dark:bg-leaf/10 dark:text-leaf dark:hover:bg-leaf/20"
-                      title="Download PDF"
-                    >
-                      <FileDown className="h-4 w-4" />
-                      <span>PDF</span>
-                    </button>
-                    <button 
-                      onClick={handlePrintPDF}
-                      className="flex items-center space-x-1 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 p-2 rounded-lg dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700"
-                      title="Print Report"
-                    >
-                      Print
-                    </button>
-                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
@@ -441,52 +377,7 @@ const UploadCrop = () => {
                 )}
               </div>
 
-              {/* Alert channels - Email / SMS delivery */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                
-                {/* Email dispatch */}
-                <button
-                  onClick={handleEmailReport}
-                  disabled={emailStatus === 'sending'}
-                  className={`flex items-center justify-center space-x-2 p-4 rounded-2xl shadow-sm border font-semibold text-sm transition ${
-                    emailStatus === 'success' 
-                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/20' 
-                      : emailStatus === 'error' 
-                      ? 'bg-red-50 border-red-200 text-red-700 dark:bg-red-950/20' 
-                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  <Mail className="h-5 w-5" />
-                  <span>
-                    {emailStatus === 'sending' && 'Sending Report Email...'}
-                    {emailStatus === 'success' && 'Report Emailed successfully!'}
-                    {emailStatus === 'error' && 'Failed to email report. Try again.'}
-                    {!emailStatus && 'Email Pathology PDF to profile'}
-                  </span>
-                </button>
 
-                {/* SMS dispatch */}
-                <button
-                  onClick={handleSMSReport}
-                  disabled={smsStatus === 'sending'}
-                  className={`flex items-center justify-center space-x-2 p-4 rounded-2xl shadow-sm border font-semibold text-sm transition ${
-                    smsStatus === 'success' 
-                      ? 'bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/20' 
-                      : smsStatus === 'error' 
-                      ? 'bg-red-50 border-red-200 text-red-700 dark:bg-red-950/20' 
-                      : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  <Phone className="h-5 w-5" />
-                  <span>
-                    {smsStatus === 'sending' && 'Dispatching SMS Alert...'}
-                    {smsStatus === 'success' && 'SMS alert sent successfully!'}
-                    {smsStatus === 'error' && 'Failed to send SMS.'}
-                    {!smsStatus && 'Send simulated SMS Alert to mobile'}
-                  </span>
-                </button>
-
-              </div>
 
             </div>
           )}

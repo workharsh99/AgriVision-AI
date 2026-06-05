@@ -13,7 +13,6 @@ import Features from './pages/Features.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import UploadCrop from './pages/UploadCrop.jsx';
 import AIChat from './pages/AIChat.jsx';
-import Reports from './pages/Reports.jsx';
 import AdminPanel from './pages/AdminPanel.jsx';
 import Contact from './pages/Contact.jsx';
 import Login from './pages/Login.jsx';
@@ -60,14 +59,7 @@ function App() {
                     </ProtectedRoute>
                   }
                 />
-                <Route
-                  path="/reports"
-                  element={
-                    <ProtectedRoute>
-                      <Reports />
-                    </ProtectedRoute>
-                  }
-                />
+
 
                 {/* Protected Admin Routes */}
                 <Route

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { LanguageContext } from '../context/LanguageContext.jsx';
-import { Camera, Bot, FileCheck, Sliders, Smartphone, CloudSun, Calendar, Percent } from 'lucide-react';
+import { Camera, Bot, Sliders, Smartphone, CloudSun, Percent } from 'lucide-react';
 
 const Features = () => {
   const { t } = useContext(LanguageContext);
@@ -21,21 +21,13 @@ const Features = () => {
       title: "Dual-Treatment Recommendation Engine",
       description: "Provides both certified chemical sprays and biological organic alternatives, detailing exact dosages."
     },
-    {
-      icon: <FileCheck className="h-6 w-6" />,
-      title: "Vector-grade PDF Reports",
-      description: "Generates high-fidelity PDF documents detailing diagnosis, farmer profile, custom logo mark, and verification QR code."
-    },
+
     {
       icon: <CloudSun className="h-6 w-6" />,
       title: "Weather Precautions Alert",
       description: "Tracks local temperature, humidity, and rainfall to trigger immediate spray schedules or rain warning recommendations."
     },
-    {
-      icon: <Calendar className="h-6 w-6" />,
-      title: "Interactive Crop Calendars",
-      description: "Provides timelines for planting, fertilizing, and harvesting tailored specifically to your farm profile crops."
-    },
+
     {
       icon: <Percent className="h-6 w-6" />,
       title: "Farm Productivity Scorecard",

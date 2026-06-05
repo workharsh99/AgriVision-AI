@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { LanguageContext } from '../context/LanguageContext.jsx';
 import { AuthContext } from '../context/AuthContext.jsx';
 import { 
-  ShieldCheck, Brain, FileText, Leaf, MessageSquare, 
+  ShieldCheck, Brain, Leaf, MessageSquare, 
   ArrowRight, Sprout, CloudSun, Target 
 } from 'lucide-react';
 
@@ -65,7 +65,7 @@ const Home = () => {
             variants={itemVariants}
             className="mx-auto mt-6 max-w-2xl text-lg text-slate-600 dark:text-slate-400"
           >
-            Upload a photo of crop leaves to instantly detect plant diseases, receive Gemini-powered organic/chemical remedies, consult our agricultural chatbot, and save PDF reports.
+            Upload a photo of crop leaves to instantly detect plant diseases, receive Gemini-powered organic/chemical remedies, and consult our agricultural chatbot.
           </motion.p>
 
           <motion.div 
@@ -153,16 +153,7 @@ const Home = () => {
               </p>
             </div>
 
-            {/* Feature 4 */}
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/50 p-6 dark:border-slate-800 dark:bg-slate-950/40">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-forest dark:bg-emerald-950/60 dark:text-leaf">
-                <FileText className="h-5 w-5" />
-              </div>
-              <h3 className="mt-4 text-lg font-bold text-slate-900 dark:text-white">PDF Reports</h3>
-              <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
-                Generate professional crop logs complete with verification QR codes, download, print or email instantly.
-              </p>
-            </div>
+
           </div>
         </div>
       </section>
@@ -201,7 +192,7 @@ const Home = () => {
                     <Target className="h-4 w-4" />
                   </div>
                   <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
-                    Disease Trend Analytics Dashboards
+                    Precision Disease Detection Models
                   </span>
                 </div>
               </div>

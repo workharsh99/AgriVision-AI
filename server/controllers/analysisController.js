@@ -1,8 +1,5 @@
 import CropAnalysis from '../models/CropAnalysis.js';
-import Report from '../models/Report.js';
 import { analyzeCropImage } from '../services/geminiService.js';
-import { sendReportEmail } from '../services/emailService.js';
-import { sendSMSAlert } from '../services/smsService.js';
 
 // Uploads crop image, queries Gemini AI for path diagnostics, saves records, and fires async notifications
 export const uploadCropImage = async (req, res) => {
@@ -42,23 +39,6 @@ export const uploadCropImage = async (req, res) => {
     });
 
     const savedAnalysis = await analysis.save();
-
-    // Generate Report entry
-    const report = new Report({
-      userId: req.user._id,
-      analysisId: savedAnalysis._id,
-      pdfUrl: '' // Generated on the fly by the client or stored later
-    });
-    await report.save();
-
-    // Trigger asynchronous notifications
-    // Email Notification
-    sendReportEmail(req.user.email, req.user.name, savedAnalysis);
-
-    // SMS notification for High severity diseases
-    if (savedAnalysis.severity === 'High') {
-      sendSMSAlert(req.user.name, null, savedAnalysis);
-    }
 
     res.status(201).json(savedAnalysis);
   } catch (error) {
@@ -126,37 +106,3 @@ export const getAnalysisById = async (req, res) => {
   }
 };
 
-// Re-triggers email report delivery for a specific scan directly from the frontend
-export const triggerEmailReport = async (req, res) => {
-  try {
-    const analysis = await CropAnalysis.findById(req.params.id);
-    if (!analysis) {
-      return res.status(404).json({ message: 'Analysis not found' });
-    }
-
-    const emailSent = await sendReportEmail(req.user.email, req.user.name, analysis);
-    if (emailSent) {
-      res.json({ message: 'Report successfully emailed.' });
-    } else {
-      res.status(500).json({ message: 'Failed to send email report.' });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// Re-triggers simulated SMS notification alerts to the user's phone
-export const triggerSMSReport = async (req, res) => {
-  try {
-    const analysis = await CropAnalysis.findById(req.params.id);
-    if (!analysis) {
-      return res.status(404).json({ message: 'Analysis not found' });
-    }
-
-    const phone = req.body.phone || null;
-    const smsData = await sendSMSAlert(req.user.name, phone, analysis);
-    res.json({ message: 'SMS Alert dispatched successfully.', details: smsData });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};

@@ -341,12 +341,9 @@ const Dashboard = () => {
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             
             {/* Recent Uploads */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:col-span-2 space-y-4">
+            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 lg:col-span-3 space-y-4">
               <div className="flex items-center justify-between border-b border-slate-100 pb-2 dark:border-slate-800">
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">{t('recentScans')}</h3>
-                <Link to="/reports" className="text-xs font-semibold text-forest hover:text-leaf dark:text-leaf flex items-center">
-                  View Full History <ArrowRight className="ml-1 h-3 w-3" />
-                </Link>
               </div>
 
               {history.length === 0 ? (
@@ -385,56 +382,11 @@ const Dashboard = () => {
                         }`}>
                           {item.severity}
                         </span>
-                        <Link 
-                          to={`/reports?id=${item._id}`} 
-                          className="text-xs font-bold text-forest hover:underline dark:text-leaf"
-                        >
-                          View Details
-                        </Link>
                       </div>
                     </div>
                   ))}
                 </div>
               )}
-            </div>
-
-            {/* Crop Calendar */}
-            <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900 space-y-4">
-              <div className="flex items-center space-x-1.5 border-b border-slate-100 pb-2 dark:border-slate-800">
-                <Calendar className="h-5 w-5 text-forest dark:text-leaf" />
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">{t('cropCalendar')}</h3>
-              </div>
-              <p className="text-[11px] text-slate-400">Timelines tailored to your farm preferences</p>
-
-              <div className="space-y-4">
-                {userCrops.map(crop => {
-                  const details = calendarDatabase[crop.toLowerCase()];
-                  if (!details) return null;
-
-                  return (
-                    <div key={crop} className="p-3 bg-slate-50 dark:bg-slate-950/30 rounded-xl space-y-2 border border-slate-100 dark:border-slate-800/80">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-slate-950 dark:text-white capitalize">{crop}</span>
-                        <span className="text-[9px] bg-forest/10 px-2 py-0.5 rounded text-forest font-semibold dark:text-leaf">Active</span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-2 text-[10px] text-slate-500">
-                        <div>
-                          <span className="text-slate-400 font-semibold block">{t('plantSowing')}</span>
-                          <span className="font-bold text-slate-700 dark:text-slate-300">{details.sowing}</span>
-                        </div>
-                        <div>
-                          <span className="text-slate-400 font-semibold block">{t('plantHarvesting')}</span>
-                          <span className="font-bold text-slate-700 dark:text-slate-300">{details.harvest}</span>
-                        </div>
-                      </div>
-                      <div className="border-t border-slate-200/50 pt-2 dark:border-slate-800">
-                        <span className="text-[9px] text-slate-400 block font-semibold">Fertilizer Tip</span>
-                        <span className="text-[9.5px] font-medium text-slate-600 dark:text-slate-400">{details.fertilizer}</span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
             </div>
 
           </div>

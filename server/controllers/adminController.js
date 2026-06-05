@@ -1,6 +1,5 @@
 import User from '../models/User.js';
 import CropAnalysis from '../models/CropAnalysis.js';
-import Report from '../models/Report.js';
 
 // Fetch all registered users in the platform (excluding password hashes) sorted by date
 export const getAllUsers = async (req, res) => {
@@ -24,8 +23,7 @@ export const deleteUser = async (req, res) => {
       return res.status(400).json({ message: 'Cannot delete the last administrator.' });
     }
 
-    // Delete user's reports, crop analyses, and user account
-    await Report.deleteMany({ userId: user._id });
+    // Delete user's crop analyses and user account
     await CropAnalysis.deleteMany({ userId: user._id });
     await User.findByIdAndDelete(user._id);
 
@@ -55,7 +53,6 @@ export const deleteReport = async (req, res) => {
       return res.status(404).json({ message: 'Report not found' });
     }
 
-    await Report.deleteMany({ analysisId: analysis._id });
     await CropAnalysis.findByIdAndDelete(analysis._id);
 
     res.json({ message: 'Crop analysis report deleted successfully.' });
@@ -64,50 +61,4 @@ export const deleteReport = async (req, res) => {
   }
 };
 
-// Aggregate global metrics (totals, conditions distribution, crop charts values)
-export const getDashboardAnalytics = async (req, res) => {
-  try {
-    const totalUsers = await User.countDocuments({});
-    const totalReports = await CropAnalysis.countDocuments({});
 
-    // Healthy vs Diseased crops
-    const healthyCrops = await CropAnalysis.countDocuments({ disease: /healthy/i });
-    const diseasedCrops = totalReports - healthyCrops;
-
-    // Severity counts
-    const severityLow = await CropAnalysis.countDocuments({ severity: 'Low' });
-    const severityMedium = await CropAnalysis.countDocuments({ severity: 'Medium' });
-    const severityHigh = await CropAnalysis.countDocuments({ severity: 'High' });
-
-    // Most common crops analyzed (aggregation)
-    const cropDistribution = await CropAnalysis.aggregate([
-      { $group: { _id: '$cropName', count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-      { $limit: 10 }
-    ]);
-
-    // Most common diseases detected (excluding healthy)
-    const diseaseDistribution = await CropAnalysis.aggregate([
-      { $match: { disease: { $not: /healthy/i } } },
-      { $group: { _id: '$disease', count: { $sum: 1 } } },
-      { $sort: { count: -1 } },
-      { $limit: 10 }
-    ]);
-
-    res.json({
-      totalUsers,
-      totalReports,
-      healthyCrops,
-      diseasedCrops,
-      severity: {
-        Low: severityLow,
-        Medium: severityMedium,
-        High: severityHigh
-      },
-      cropDistribution,
-      diseaseDistribution
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
