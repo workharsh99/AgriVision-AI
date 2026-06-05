@@ -15,7 +15,7 @@ A high-performance, responsive smart agricultural assistant and crop disease dia
 ### 🎨 Premium UI/UX Design System
 * **Dark Mode & HSL Color Palette**: A gorgeous, field-optimized dark/light aesthetic using custom glassmorphic panels, smooth transitions, and high-contrast charts suitable for field work.
 * **Micro-Animations & Responsive Layouts**: Built from the ground up to be fully mobile-responsive with fluid grid structures, hover scale effects, and animated state transitions.
-* **Multi-Language Support**: Fully localized translations for English, Hindi, and Spanish to accommodate diverse farming demographics.
+* **Multi-Language Support**: Fully localized translations for English and Hindi to accommodate diverse farming demographics.
 
 ### 🤖 Generative AI Diagnostics & Assistant
 * **Instant Pathogen Scanning**: Upload or capture plant leaf images to identify crop diseases instantly.
