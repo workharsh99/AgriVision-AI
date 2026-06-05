@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { LanguageContext } from '../context/LanguageContext.jsx';
 import { Mail, Phone, MapPin, Send, AlertCircle } from 'lucide-react';
+import API from '../services/api.js';
 
 const Contact = () => {
   const { t } = useContext(LanguageContext);
@@ -8,14 +9,26 @@ const Contact = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSuccess(true);
-    setName('');
-    setEmail('');
-    setMessage('');
-    setTimeout(() => setSuccess(false), 5000);
+    setLoading(true);
+    setError('');
+    setSuccess(false);
+
+    try {
+      await API.post('/contact', { name, email, message });
+      setSuccess(true);
+      setName('');
+      setEmail('');
+      setMessage('');
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to send message. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -63,15 +76,23 @@ const Contact = () => {
               </div>
             )}
 
+            {error && (
+              <div className="flex items-center space-x-2 rounded-lg bg-red-50 p-4 text-sm text-red-700 dark:bg-red-950/20 dark:text-red-400 mb-6">
+                <AlertCircle className="h-5 w-5 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Name</label>
                 <input
                   type="text"
                   required
+                  disabled={loading}
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="block w-full mt-1 rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-forest focus:bg-white dark:border-slate-800 dark:bg-slate-800 dark:text-white dark:focus:border-leaf"
+                  className="block w-full mt-1 rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-forest focus:bg-white dark:border-slate-800 dark:bg-slate-800 dark:text-white dark:focus:border-leaf disabled:opacity-60"
                   placeholder="John Doe"
                 />
               </div>
@@ -81,9 +102,10 @@ const Contact = () => {
                 <input
                   type="email"
                   required
+                  disabled={loading}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full mt-1 rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-forest focus:bg-white dark:border-slate-800 dark:bg-slate-800 dark:text-white dark:focus:border-leaf"
+                  className="block w-full mt-1 rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-forest focus:bg-white dark:border-slate-800 dark:bg-slate-800 dark:text-white dark:focus:border-leaf disabled:opacity-60"
                   placeholder="john@example.com"
                 />
               </div>
@@ -92,20 +114,26 @@ const Contact = () => {
                 <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Message</label>
                 <textarea
                   required
+                  disabled={loading}
                   rows={4}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="block w-full mt-1 rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-forest focus:bg-white dark:border-slate-800 dark:bg-slate-800 dark:text-white dark:focus:border-leaf"
+                  className="block w-full mt-1 rounded-xl border border-slate-200 bg-slate-50 py-2.5 px-4 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-forest focus:bg-white dark:border-slate-800 dark:bg-slate-800 dark:text-white dark:focus:border-leaf disabled:opacity-60"
                   placeholder="Write your agricultural query..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="flex items-center justify-center space-x-2 rounded-xl bg-forest px-6 py-2.5 text-sm font-semibold text-white hover:bg-forest-dark transition"
+                disabled={loading}
+                className="flex items-center justify-center space-x-2 rounded-xl bg-forest px-6 py-2.5 text-sm font-semibold text-white hover:bg-forest-dark transition disabled:opacity-50"
               >
-                <Send className="h-4 w-4" />
-                <span>{t('send')}</span>
+                {loading ? (
+                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+                <span>{loading ? 'Sending...' : t('send')}</span>
               </button>
             </form>
           </div>
