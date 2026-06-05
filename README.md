@@ -83,7 +83,7 @@ Create a `.env` file inside the `server/` directory:
 
 ```env
 PORT=5000
-# Connection URI for MongoDB. If you encounter querySrv DNS resolution errors (e.g. ECONNREFUSED) on Windows/Docker/VPNs,
+# Connection URI for MongoDB. If you encounter querySrv DNS resolution errors (e.g. ECONNREFUSED) on Windows/VPNs,
 # use the standard replica set URI format (mongodb://user:pass@host1:27017,host2:27017.../?ssl=true&authSource=admin...)
 MONGO_URI=mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/agrivision?retryWrites=true&w=majority
 JWT_SECRET=your_jwt_signing_key_here
@@ -123,20 +123,7 @@ npm run dev
 ```
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
----
 
-## 🐳 Docker Deployment
-
-The application is containerized with multi-stage production Dockerfiles and orchestratable via `docker-compose`.
-
-```bash
-# Spin up MongoDB, Backend, and Frontend containers simultaneously
-docker compose up --build
-```
-* **Frontend**: Accessible at [http://localhost:5173](http://localhost:5173) (Served via Nginx)
-* **Backend**: Accessible at [http://localhost:5000](http://localhost:5000) (Served via Node/Express)
-
----
 
 ## 📝 Backend API Endpoints
 

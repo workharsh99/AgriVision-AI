@@ -66,31 +66,7 @@ Vercel is optimized for React/Vite builds.
 
 ---
 
-## 4. Docker Deployment (Alternative Setup)
-
-If you prefer containerized deployment, the repository contains configured `Dockerfile`s for both services and a root-level `docker-compose.yml`.
-
-### Local Development / Testing
-1. Create a root `.env` or set environment variables in your terminal:
-   * `GEMINI_API_KEY` (Your Google AI API Key)
-   * `JWT_SECRET` (Optional: Custom JWT key, otherwise falls back to default)
-   * `VITE_API_URL` (Optional: Defaults to `http://localhost:5000/api`)
-2. Run the multi-container stack from the root directory:
-   ```bash
-   docker compose up --build
-   ```
-3. Access the application:
-   * Frontend: [http://localhost:5173](http://localhost:5173)
-   * Backend API: [http://localhost:5000/api](http://localhost:5000/api)
-   * MongoDB Local: `mongodb://localhost:27017`
-
-### Production Container Deployment
-* **Backend (`server/Dockerfile`)**: Build and run this image on any container orchestration platform (e.g., AWS ECS, GCP Cloud Run, Heroku, or Render Docker Web Services).
-* **Frontend (`client/Dockerfile`)**: Uses Nginx to serve optimized static Vite assets with Single Page Application (SPA) routing support. Pass `VITE_API_URL` during build-time arguments (`--build-arg VITE_API_URL=https://your-api.com/api`).
-
----
-
-## 5. Verification Check
+## 4. Verification Check
 
 Once both services are deployed:
 1. Open the frontend application URL.
